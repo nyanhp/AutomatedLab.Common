@@ -22,7 +22,7 @@
 
     RequiredModules        = @('newtonsoft.json')
 
-    CmdletsToExport        = '*'
+    CmdletsToExport        = @()
 
     VariablesToExport      = @()
 
