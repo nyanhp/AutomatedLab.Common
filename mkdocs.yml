@@ -1,7 +1,8 @@
 site_name: AutomatedLab.Common - the only library you need.
 repo_url: https://github.com/AutomatedLab/AutomatedLab.Common
 site_author: Jan-Hendrik Peters
-edit_uri: edit/master/docs/
+docs_dir: ./Help/
+edit_uri: edit/master/Help/
 theme: readthedocs
 copyright: "AutomatedLab.Common is licensed under the <a href='https://github.com/AutomatedLab/AutomatedLab.Common/raw/master/LICENSE'>MIT license"
 pages:
