@@ -2,11 +2,10 @@ site_name: AutomatedLab.Common - the only library you need.
 repo_url: https://github.com/nyanhp/AutomatedLab.Common
 site_author: Jan-Hendrik Peters
 docs_dir: Help
-site_dir: site
 edit_uri: edit/master/Help/
 theme: readthedocs
 copyright: "AutomatedLab.Common is licensed under the <a href='https://github.com/nyanhp/AutomatedLab.Common/raw/master/LICENSE'>MIT license"
-pages:
+nav:
   - Home: index.md
   - Functions:
     -Add-AccountPrivilege : en-us/Add-AccountPrivilege.md
