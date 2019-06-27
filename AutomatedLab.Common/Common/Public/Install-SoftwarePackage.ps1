@@ -110,13 +110,25 @@ function Install-SoftwarePackage
     }
     elseif ($installationMethod -eq '.exe')
     { }
+    elseif ($installationMethod -eq '.rpm')
+    {
+        Write-Verbose 'Installing RPM file'
+        $CommandLine = '-ivh {0}' -f $Path
+        $Path = 'rpm'
+    }
+    elseif ($installationMethod -eq '.deb')
+    {
+        Write-Verbose 'Installing DEB file'
+        $CommandLine = '-i {0}' -f $Path
+        $Path = 'dpkg'
+    }
     else
     {
         Write-Error -Message 'The extension of the file to install is unknown'
         return
     }
 
-    if ($AsScheduledJob)
+    if ($AsScheduledJob -and $installationMethod -notin '.deb', '.rpm')
     {
         $jobName = "AL_$([guid]::NewGuid())"
         Write-Verbose "In the AsScheduledJob mode, creating scheduled job named '$jobName'"
@@ -158,10 +170,10 @@ function Install-SoftwarePackage
             Write-Verbose "Running Register-ScheduledJob as PowerShell Version is >=3.0"
 
             $scheduledJobParams = @{
-                Name = $jobName
-                ScriptBlock = (Get-Command -Name New-InstallProcess).ScriptBlock
+                Name         = $jobName
+                ScriptBlock  = (Get-Command -Name New-InstallProcess).ScriptBlock
                 ArgumentList = $Path, $CommandLine, $UseShellExecute
-                RunNow = $true
+                RunNow       = $true
             }
             if ($Credential) { $scheduledJobParams.Add('Credential', $Credential) }
             $scheduledJob = Register-ScheduledJob @scheduledJobParams
@@ -184,7 +196,7 @@ function Install-SoftwarePackage
     
     Start-Sleep -Seconds 5
     
-    if ($AsScheduledJob)
+    if ($AsScheduledJob -and $installationMethod -notin '.deb', '.rpm')
     {
         if ($PSVersionTable.PSVersion -lt '3.0')
         {
@@ -205,9 +217,9 @@ function Install-SoftwarePackage
         
     Write-Verbose "Exit code of installation process is '$($result.Process.ExitCode)'"
     if ($result.Process.ExitCode -ne 0 `
-        -and $result.Process.ExitCode -ne 3010 `
-        -and $result.Process.ExitCode -ne $null `
-    -and $ExpectedReturnCodes -notcontains $result.Process.ExitCode )
+            -and $result.Process.ExitCode -ne 3010 `
+            -and $result.Process.ExitCode -ne $null `
+            -and $ExpectedReturnCodes -notcontains $result.Process.ExitCode )
     {
         throw (New-Object AutomatedLab.Common.Win32Exception($result.Process.ExitCode))
     }
