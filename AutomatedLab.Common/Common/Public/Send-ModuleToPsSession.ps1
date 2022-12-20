@@ -129,7 +129,7 @@ function Send-ModuleToPSSession
                 $PSVersionTable.PSVersion   
             }
 
-            if ($Local:Module.PowerShellVersion -gt $sessionVersion)
+            if (-not $Force.IsPresent -and $Local:Module.PowerShellVersion -gt $sessionVersion)
             {
                 Write-Warning -Message "Module $($Local:Module.Name) requires PS Version $($Local:Module.PowerShellVersion). We only found $($sessionVersion) on $($s.ComputerName). Skipping."
                 continue
